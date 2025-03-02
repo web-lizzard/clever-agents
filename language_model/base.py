@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import AsyncGenerator, Generic, TypeVar
 
 from pydantic import BaseModel
 
@@ -16,7 +16,7 @@ class LLMCall(ABC, Generic[ResponseT]):
 
     @abstractmethod
     async def generate_structured_output(
-        self, messages: ChatMLDocument, temperature: float = 0.7
+        self, messages: ChatMLDocument, temperature: float, model_name: str
     ) -> ResponseT:
         """
         Abstract method for asynchronously calling a language model
@@ -29,4 +29,9 @@ class LLMCall(ABC, Generic[ResponseT]):
         Returns:
             Structured model response conforming to ResponseT type
         """
+        raise NotImplementedError
+
+
+    @abstractmethod
+    async def generate_stream(self, messages: ChatMLDocument, temperature: float, model_name: str) -> AsyncGenerator[str, None]:
         raise NotImplementedError

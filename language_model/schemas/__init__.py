@@ -1,4 +1,3 @@
-from .chat_ml import ChatMessage, ChatMLDocument, RoleType
+from .chat_ml import ChatConversation, ChatMessage
 
-
-__all__ = ["ChatMessage", "ChatMLDocument", "RoleType"]
+__all__ = ["ChatMessage", "ChatConversation"]
