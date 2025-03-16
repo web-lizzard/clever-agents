@@ -49,3 +49,8 @@ class ChatConversation:
                 metadata=metadata,
             )
         )
+
+    
+    def to_openai_format(self) -> list:
+        return [message.to_dict() for message in self.messages]
+

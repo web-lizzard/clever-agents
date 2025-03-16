@@ -3,7 +3,7 @@ from typing import AsyncGenerator, Type
 from openai import AsyncOpenAI
 
 from .base import LLMCall, ResponseT
-from .schemas import ChatMLDocument
+from .schemas import ChatConversation
 
 
 class OpenAILLMCall(LLMCall):
@@ -27,7 +27,7 @@ class OpenAILLMCall(LLMCall):
         self._client = client
 
     async def generate_structured_output(
-        self, messages: ChatMLDocument, response_model: Type[ResponseT], temperature: float = 0.7, model_name: str = 'gpt-4o-mini'
+        self, messages: ChatConversation, response_model: Type[ResponseT], temperature: float = 0.7, model_name: str = 'gpt-4o-mini'
     ) -> ResponseT:
         """
         Generate structured output using OpenAI's beta.chat.completions.parse method.
@@ -41,7 +41,7 @@ class OpenAILLMCall(LLMCall):
         """
 
         completion = await self._client.beta.chat.completions.parse(
-            messages=messages.to_list(),
+            messages=messages.to_openai_format(),
             model=model_name,
             response_format=response_model,
             temperature=temperature
@@ -55,7 +55,7 @@ class OpenAILLMCall(LLMCall):
         return parsed_response
 
     async def generate_stream(
-        self, messages: ChatMLDocument, temperature: float = 0.7, model_name: str = 'gpt-4o-mini'
+        self, messages: ChatConversation, temperature: float = 0.7, model_name: str = 'gpt-4o-mini'
     ) -> AsyncGenerator[str, None]:
         """
         Stream the response from OpenAI API.
@@ -69,7 +69,7 @@ class OpenAILLMCall(LLMCall):
         """
         stream = await self._client.chat.completions.create(
             model=model_name,
-            messages=messages.to_list(),
+            messages=messages.to_openai_format(),
             temperature=temperature,
             stream=True
         )
