@@ -1,4 +1,3 @@
-from .builder import PromptBuilder
+from .builder import Prompt, PromptBuilder
 
-
-__all__ = ["PromptBuilder"]
+__all__ = ["PromptBuilder", "Prompt"]

@@ -1,0 +1,122 @@
+[
+  {
+    "vars": {
+      "query": "Give me a 5 proposal for cyberpunk books"
+    },
+    "assert": [
+      {
+        "type": "is-json"
+      },
+      {
+        "type": "contains-json",
+        "value": {
+          "required": [
+            "response"
+          ],
+          "properties": {
+            "response": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "description": "Test #1: Cyberpunk book proposals"
+  },
+  {
+    "vars": {
+      "query": "Recommend 3 sci-fi movies from the 1980s"
+    },
+    "assert": [
+      {
+        "type": "is-json"
+      },
+      {
+        "type": "contains-json",
+        "value": {
+          "required": [
+            "response"
+          ],
+          "properties": {
+            "response": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "description": "Test #2: Sci-fi movie recommendations"
+  },
+  {
+    "vars": {
+      "query": "List 4 dystopian novels and their main themes"
+    },
+    "assert": [
+      {
+        "type": "is-json"
+      },
+      {
+        "type": "contains-json",
+        "value": {
+          "required": [
+            "response"
+          ],
+          "properties": {
+            "response": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "description": "Test #3: Dystopian novels analysis"
+  },
+  {
+    "vars": {
+      "query": "Compare virtual reality and augmented reality technologies"
+    },
+    "assert": [
+      {
+        "type": "is-json"
+      },
+      {
+        "type": "contains-json",
+        "value": {
+          "required": [
+            "response"
+          ],
+          "properties": {
+            "response": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "description": "Test #4: VR vs AR comparison"
+  },
+  {
+    "vars": {
+      "query": "Write a short poem about artificial intelligence"
+    },
+    "assert": [
+      {
+        "type": "is-json"
+      },
+      {
+        "type": "contains-json",
+        "value": {
+          "required": [
+            "response"
+          ],
+          "properties": {
+            "response": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    ],
+    "description": "Test #5: AI poetry generation"
+  }
+]

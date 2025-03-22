@@ -1,0 +1,64 @@
+- vars:
+    query: "Explain how blockchain technology works in simple terms"
+  assert:
+    - type: is-json
+    - type: contains-json
+      value:
+        required:
+          - response
+        properties:
+          response:
+            type: string
+  description: "Test #6: Technical explanation of blockchain"
+
+- vars:
+    query: "Create a short story about a detective who can communicate with animals"
+  assert:
+    - type: is-json
+    - type: contains-json
+      value:
+        required:
+          - response
+        properties:
+          response:
+            type: string
+  description: "Test #7: Creative writing - detective story"
+
+- vars:
+    query: "Suggest 5 ways to improve productivity while working from home"
+  assert:
+    - type: is-json
+    - type: contains-json
+      value:
+        required:
+          - response
+        properties:
+          response:
+            type: string
+  description: "Test #8: Productivity advice"
+
+- vars:
+    query: "Analyze the environmental impact of electric vehicles compared to gas-powered cars"
+  assert:
+    - type: is-json
+    - type: contains-json
+      value:
+        required:
+          - response
+        properties:
+          response:
+            type: string
+  description: "Test #9: Environmental analysis comparison"
+
+- vars:
+    query: "List the main architectural styles of ancient Greece and their defining characteristics"
+  assert:
+    - type: is-json
+    - type: contains-json
+      value:
+        required:
+          - response
+        properties:
+          response:
+            type: string
+  description: "Test #10: Historical architectural information"

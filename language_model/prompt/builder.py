@@ -1,7 +1,44 @@
+import json
+from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Self, Union
 
 import yaml
+
+
+@dataclass
+class Prompt:
+    """
+    A prompt abstraction that behaves like a string and can be serialized to JSON.
+    """
+    content: str
+    
+    def __str__(self) -> str:
+        """Make the Prompt behave like a string."""
+        return self.content
+    
+    def __repr__(self) -> str:
+        """String representation of the prompt."""
+        if len(self.content) > 50:
+            return f"Prompt({repr(self.content)[:50]}...)"
+        return f"Prompt({repr(self.content)})"
+    
+    def write_json(self, filepath: Union[str, Path]) -> None:
+        """
+        Write the prompt to a JSON file in a format suitable for chat-based LLMs.
+        
+        Args:
+            filepath: Path to the output JSON file.
+        """
+        data = [
+            {
+                "role": "system",
+                "content": self.content
+            }
+        ]
+        
+        with open(Path(filepath), 'w') as f:
+            json.dump(data, f, indent=2)
 
 
 class PromptBuilder:
@@ -12,12 +49,12 @@ class PromptBuilder:
         Args:
             body: The main body of the prompt (concise explanation).
         """
-        self.body: str = body
-        self.title: Optional[str] = None
-        self.examples: List[dict] = []
-        self.rules: List[str] = []
-        self.context: Optional[str] = None
-        self.confirmation: Optional[str] = None
+        self._body: str = body
+        self._title: Optional[str] = None
+        self._examples: List[dict] = []
+        self._rules: List[str] = []
+        self._context: Optional[str] = None
+        self._confirmation: Optional[str] = None
     
     def with_title(self, title: str) -> Self:
         """
@@ -29,7 +66,7 @@ class PromptBuilder:
         Returns:
             The builder instance for method chaining.
         """
-        self.title = title
+        self._title = title
         return self
     
     def with_examples(self, yaml_path: Union[str, Path]) -> Self:
@@ -50,7 +87,7 @@ class PromptBuilder:
         for key, value in examples_data.items():
             if key.startswith('example_') and isinstance(value, dict):
                 if 'request' in value and 'response' in value:
-                    self.examples.append({
+                    self._examples.append({
                         'request': value['request'],
                         'response': value['response']
                     })
@@ -67,7 +104,7 @@ class PromptBuilder:
         Returns:
             The builder instance for method chaining.
         """
-        self.rules = rules
+        self._rules = rules
         return self
     
     def with_context(self, context: str) -> Self:
@@ -80,7 +117,7 @@ class PromptBuilder:
         Returns:
             The builder instance for method chaining.
         """
-        self.context = context
+        self._context = context
         return self
     
     def with_confirmation(self, confirmation: str) -> Self:
@@ -93,44 +130,44 @@ class PromptBuilder:
         Returns:
             The builder instance for method chaining.
         """
-        self.confirmation = confirmation
+        self._confirmation = confirmation
         return self
     
-    def build(self) -> str:
+    def build(self) -> Prompt:
         """
         Build and return the complete prompt according to the specified format.
         
         Returns:
-            The complete prompt as a string.
+            A Prompt object that behaves like a string and can be serialized to JSON.
         """
         prompt_parts: List[str] = []
         
-        if self.title:
-            prompt_parts.append(f"{self.title}")
-            prompt_parts.append("")
+        if self._title:
+            prompt_parts.append(f"{self._title}")
+            prompt_parts.append("")  # Empty line
         
-        prompt_parts.append(f"{self.body}")
-        prompt_parts.append("")
+        prompt_parts.append(f"{self._body}")
+        prompt_parts.append("")  # Empty line
         
-        if self.rules:
+        if self._rules:
             prompt_parts.append("<rules>")
             prompt_parts.append("")
-            for rule in self.rules:
+            for rule in self._rules:
                 prompt_parts.append(f"- {rule}")
             prompt_parts.append("")
-            prompt_parts.append("</rules>")
+            prompt_parts.append("</prompt_rules>")
             prompt_parts.append("")
         
-        if self.context:
+        if self._context:
             prompt_parts.append("<context>")
-            prompt_parts.append(self.context)
+            prompt_parts.append(self._context)
             prompt_parts.append("</context>")
             prompt_parts.append("")
         
-        if self.examples:
+        if self._examples:
             prompt_parts.append("<examples>")
-            for i, example in enumerate(self.examples):
-                if i > 0:
+            for i, example in enumerate(self._examples):
+                if i > 0:  # Add an empty line between examples
                     prompt_parts.append("")
                 prompt_parts.append(f"USER: {example['request']}")
                 prompt_parts.append(f"AI: {example['response']}")
@@ -138,7 +175,7 @@ class PromptBuilder:
             prompt_parts.append("</examples>")
             prompt_parts.append("")
         
-        if self.confirmation:
-            prompt_parts.append(f"{self.confirmation}")
+        if self._confirmation:
+            prompt_parts.append(f"{self._confirmation}")
         
-        return "\n".join(prompt_parts)
+        return Prompt("\n".join(prompt_parts))
