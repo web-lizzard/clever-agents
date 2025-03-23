@@ -1,0 +1,31 @@
+example_1:
+  request: |
+    <document>
+    The company reported Q2 revenue of $1.2B, up 15% year-over-year. 
+    This growth was driven by strong performance in our cloud division...
+    </document>
+    
+    <chunk>
+    The cloud division grew 28% year-over-year.
+    </chunk>
+    
+  response: |
+    This chunk refers to Q2 financial results for the cloud division of 
+    the company mentioned in the document. The 28% growth contributed to
+    overall company revenue increase of 15%.
+
+example_2:
+  request: |
+    <document>
+    Our research focused on three key areas: battery technology, 
+    autonomous driving systems, and charging infrastructure...
+    </document>
+    
+    <chunk>
+    The new solid-state batteries achieved 500 Wh/kg energy density.
+    </chunk>
+    
+  response: |
+    This chunk discusses battery technology advancements from the research
+    document, specifically highlighting energy density improvements in
+    solid-state batteries.

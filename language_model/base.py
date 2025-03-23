@@ -15,7 +15,7 @@ class LLMCall(ABC):
     """
     @abstractmethod
     async def generate_structured_output(
-        self, messages: ChatConversation, response_model: Type[ResponseT], temperature: float, model_name: str
+        self, messages: ChatConversation, response_model: Type[ResponseT], temperature: float
     ) -> ResponseT:
         """
         Abstract method for asynchronously calling a language model
@@ -32,5 +32,5 @@ class LLMCall(ABC):
 
 
     @abstractmethod
-    async def generate_stream(self, messages: ChatConversation, temperature: float, model_name: str) -> AsyncGenerator[str, None]:
+    async def generate_stream(self, messages: ChatConversation, temperature: float) -> AsyncGenerator[str, None]:
         raise NotImplementedError

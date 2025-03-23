@@ -6,41 +6,6 @@ from typing import List, Optional, Self, Union
 import yaml
 
 
-@dataclass
-class Prompt:
-    """
-    A prompt abstraction that behaves like a string and can be serialized to JSON.
-    """
-    content: str
-    
-    def __str__(self) -> str:
-        """Make the Prompt behave like a string."""
-        return self.content
-    
-    def __repr__(self) -> str:
-        """String representation of the prompt."""
-        if len(self.content) > 50:
-            return f"Prompt({repr(self.content)[:50]}...)"
-        return f"Prompt({repr(self.content)})"
-    
-    def write_json(self, filepath: Union[str, Path]) -> None:
-        """
-        Write the prompt to a JSON file in a format suitable for chat-based LLMs.
-        
-        Args:
-            filepath: Path to the output JSON file.
-        """
-        data = [
-            {
-                "role": "system",
-                "content": self.content
-            }
-        ]
-        
-        with open(Path(filepath), 'w') as f:
-            json.dump(data, f, indent=2)
-
-
 class PromptBuilder:
     def __init__(self, body: str) -> None:
         """
@@ -140,7 +105,7 @@ class PromptBuilder:
         self._confirmation = confirmation
         return self
     
-    def build(self) -> Prompt:
+    def build(self) -> str:
         """
         Build and return the complete prompt according to the specified format.
         
@@ -183,4 +148,4 @@ class PromptBuilder:
         if self._confirmation:
             prompt_parts.append(f"{self._confirmation}")
         
-        return Prompt("\n".join(prompt_parts))
+        return "\n".join(prompt_parts)

@@ -14,6 +14,7 @@ class OpenAILLMCall(LLMCall):
     def __init__(
         self,
         client: AsyncOpenAI,
+        model_name: str = 'gpt-4o-mini'
     ):
         """
         Initialize the OpenAI structured output model.
@@ -25,6 +26,7 @@ class OpenAILLMCall(LLMCall):
             messages:
         """
         self._client = client
+        self._model_name = model_name
 
     async def generate_structured_output(
         self, messages: ChatConversation, response_model: Type[ResponseT], temperature: float = 0.7, model_name: str = 'gpt-4o-mini'
@@ -55,7 +57,7 @@ class OpenAILLMCall(LLMCall):
         return parsed_response
 
     async def generate_stream(
-        self, messages: ChatConversation, temperature: float = 0.7, model_name: str = 'gpt-4o-mini'
+        self, messages: ChatConversation, temperature: float = 0.7
     ) -> AsyncGenerator[str, None]:
         """
         Stream the response from OpenAI API.
@@ -68,7 +70,7 @@ class OpenAILLMCall(LLMCall):
             Text chunks from the streaming response
         """
         stream = await self._client.chat.completions.create(
-            model=model_name,
+            model=self._model_name,
             messages=messages.to_openai_format(),
             temperature=temperature,
             stream=True

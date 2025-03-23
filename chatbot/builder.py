@@ -20,9 +20,10 @@ class ChatBotBuilder(ABC):
 
 
 class GradioChatbotBuilder(ChatBotBuilder):
-    def __init__(self) -> None:
+    def __init__(self, chat_interface_enabled: bool = False) -> None:
         self._outputs = []
         self._inputs = []
+        self._chat_interface_enabled = chat_interface_enabled
 
 
     def with_markdown_ouput(self, label: str) -> Self:
@@ -36,4 +37,8 @@ class GradioChatbotBuilder(ChatBotBuilder):
         return self
 
     def build(self, handler: Callable)-> None:
+        if self._chat_interface_enabled:
+            gr.ChatInterface(fn=handler, flagging_mode='never', concurrency_limit=5).launch()   
+            return
+
         gr.Interface(fn=handler, inputs=self._inputs, outputs=self._outputs, flagging_mode='never', concurrency_limit=5).launch()   
