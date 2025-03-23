@@ -46,10 +46,10 @@ class LLMContextGenerator(ContextGenerator):
             PromptBuilder(main_body)
             .with_title("Contextual Retrieval Prompt")
             .with_rules([
-                "Focus on hierarchical relationships within document",
-                "Extract temporal/causal connections",
-                "Preserve XML structure in response",
-                "Never invent information not present in document"
+                "Generate 1-2 sentence context explaining the chunk's position in the document",
+                "Include key entities and document structure information",
+                "Do not include any markdown formatting",
+                "Respond only with the contextual information"
             ])
             .with_context({
                 "chunk": chunk
@@ -60,7 +60,6 @@ class LLMContextGenerator(ContextGenerator):
     
     def _get_chat_conversation(self, builder: PromptBuilder) -> ChatConversation:
         conversation = ChatConversation()
-
         conversation.add_system_message(builder.build())
         
         return conversation
