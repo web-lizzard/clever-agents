@@ -107,17 +107,24 @@ class PromptBuilder:
         self._rules = rules
         return self
     
-    def with_context(self, context: str) -> Self:
+    def with_context(self, context: dict[str, str]) -> Self:
         """
-        Add additional context to the prompt.
+        Add additional context to the prompt in XML-like format.
         
         Args:
-            context: The context information to add.
-            
+            context: Dictionary where keys are section names and values are the content.
+                    Each section will be formatted as <key>value</key>.
+                
         Returns:
             The builder instance for method chaining.
         """
-        self._context = context
+        # Format the context as XML-like tags
+        formatted_sections = []
+        for key, value in context.items():
+            formatted_sections.append(f"<{key}>{value}</{key}>")
+        
+        # Join all formatted sections with newlines
+        self._context = "\n".join(formatted_sections)
         return self
     
     def with_confirmation(self, confirmation: str) -> Self:
@@ -159,9 +166,7 @@ class PromptBuilder:
             prompt_parts.append("")
         
         if self._context:
-            prompt_parts.append("<context>")
             prompt_parts.append(self._context)
-            prompt_parts.append("</context>")
             prompt_parts.append("")
         
         if self._examples:
