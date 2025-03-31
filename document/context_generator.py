@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from openai import BaseModel
+from pydantic import BaseModel
 
 from language_model import LLMCall
-from language_model.prompt.builder import PromptBuilder
+from language_model.prompt import PromptBuilder
 from language_model.schemas import ChatConversation
 
 
@@ -44,7 +44,7 @@ class LLMContextGenerator(ContextGenerator):
         
         return (
             PromptBuilder(main_body)
-            .with_title("Contextual Retrieval Prompt")
+            .with_title("Contextual Retrieval")
             .with_rules([
                 "Generate 1-2 sentence context explaining the chunk's position in the document",
                 "Include key entities and document structure information",

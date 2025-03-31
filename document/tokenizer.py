@@ -33,3 +33,5 @@ class TiktokenTokenizer:
     def format_for_tokenization(self, text: str) -> str:
         """Formatuje tekst przed tokenizacją."""
         return f"<|im_start|>user\n{text}<|im_end|>\n<|im_start|>assistant<|im_end|>"
+    
+
